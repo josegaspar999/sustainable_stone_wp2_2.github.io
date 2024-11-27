@@ -1,0 +1,308 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<title>Network access to the Scout robots</title>
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Verdana;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+@font-face
+	{font-family:"Arial Unicode MS";
+	panose-1:2 11 6 4 2 2 2 2 2 4;}
+@font-face
+	{font-family:"Aptos Display";}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	font-size:12.0pt;
+	font-family:"Times New Roman",serif;}
+h1
+	{mso-style-link:"Heading 1 Char";
+	margin:0cm;
+	page-break-after:avoid;
+	font-size:12.0pt;
+	font-family:"Times New Roman",serif;
+	font-weight:bold;}
+p.MsoBodyText2, li.MsoBodyText2, div.MsoBodyText2
+	{mso-style-link:"Body Text 2 Char";
+	margin:0cm;
+	text-align:center;
+	font-size:12.0pt;
+	font-family:"Times New Roman",serif;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+p
+	{margin-right:0cm;
+	margin-left:0cm;
+	font-size:12.0pt;
+	font-family:"Arial Unicode MS",serif;}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-link:"Heading 1";
+	font-family:"Aptos Display",sans-serif;
+	color:#0F4761;}
+span.BodyText2Char
+	{mso-style-name:"Body Text 2 Char";
+	mso-style-link:"Body Text 2";}
+.MsoChpDefault
+	{font-size:10.0pt;}
+@page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-GB link=blue vlink=purple style='word-wrap:break-word'>
+
+<div class=WordSection1>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1 align=center style='text-align:center'><span style='font-size:24.0pt;
+font-family:"Verdana",sans-serif;color:blue'>Network access to the</span></h1>
+
+<h1 align=center style='text-align:center'><span style='font-size:24.0pt;
+font-family:"Verdana",sans-serif;color:blue'>Scout robots</span></h1>
+
+<p class=MsoNormal align=center style='text-align:center'>&nbsp;</p>
+
+<p align=center style='text-align:center'><span style='font-size:13.5pt;
+font-family:"Verdana",sans-serif'><a href="#intro">Introduction</a> | <a
+href="#base_station">Base Station</a> | <a href="#scouts">Scouts</a> | <a
+href="#accessing">Access</a> | <a href="#hw_details">HW details</a> | <a
+href="#ip_numbers_summary">IP numbers</a></span></p>
+
+<p class=MsoNormal align=center style='text-align:center'>&nbsp;</p>
+
+<h1 align=center style='text-align:center'><span style='font-family:"Verdana",sans-serif;
+color:blue'>Abstract</span></h1>
+
+<p class=MsoNormal align=center style='text-align:center'>&nbsp;</p>
+
+<p class=MsoBodyText2><span lang=EN-US>This document describes a wireless network
+providing access to the Scout-Robots in our laboratory, Vislab at the Institute
+for Systems and Robotics (ISR).</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'>&nbsp;</p>
+
+<p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
+style='font-size:10.0pt'>Last update: April 2002</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1><a name=intro><span style='font-family:"Verdana",sans-serif;color:blue'>Introduction</span></a></h1>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span lang=EN-US>Our wireless network connects two Scout
+robots and one PC, the base station. This network, despite hyper-local, has a
+connection to the ISR’s general network through a second network board at the
+base station. Therefore the base station works as a pass through among the
+robots and the general network.</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span lang=EN-US>The bandwidth of the hyper-local network is
+designed for monitoring the robots and so it is significantly less than the one
+of the general network. Only relevant traffic is allowed to enter into the
+hyper-local network. This is accomplished using a different class of addresses
+in the hyper-local network combined with a proper routing policy. The
+hyper-local network addresses are in the class 192.168.1.* while the general
+network addresses are the 10.*.*.* one.</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1><a name="base_station"><span lang=EN-US style='font-family:"Verdana",sans-serif;
+color:blue'>Base station routing</span></a></h1>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span lang=EN-US>The base station is running Windows 2000
+and is configured to bridge the hyper-local and the general networks whenever
+there are messages directed to or coming from the robots. Every message listen
+in the general network directed to an 192.168.1.* address is repeated into the
+hyper-local network, and every one listen in the hyper-local network and
+directed to an 10.*.*.* address is repeated into the general network.</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span lang=EN-US>The routing functionality is enough for
+outside access to the robots, but not from the robots to the general network.
+Access from the robots to the general network is achieved through
+IP-masquerading. IP-masquerading is implemented with a process running in
+background also in the base station.</span></p>
+
+<p class=MsoNormal><b><span lang=EN-US style='color:red'>Note:</span></b><span
+lang=EN-US> the license for the software doing IP-masquerading is under the
+renewal process and therefore this function is not available.</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span lang=EN-US>The base station is named <i>rbase</i> and
+is seen in the general network with the IP-number 10.0.3.2. In the hyper-local
+network <i>rbase</i> has the IP-number 192.168.1.1.</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1><a name=scouts><span lang=EN-US style='font-family:"Verdana",sans-serif;
+color:blue'>The Scout robots</span></a></h1>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The robots, two Nomad Scouts, are named <i>rcastor</i> and <i>rpollux</i>
+and have respectively the IP-numbers 192.168.1.31 and 192.168.1.32.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span lang=EN-US>The robots are currently running Linux
+RH6.2 with minimal network functionalities in order to optimise autonomy and
+robustness against server faults.</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span lang=EN-US>For example the network software of the
+robots works exclusively upon IP-numbers (except for a few cases defined in the
+local hosts table), i.e. the DNS is disabled. This avoids delays associated to
+name translations and boot problems when the base station is not reachable.</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span lang=EN-US>The IP-numbers of the robots are local and
+therefore do not pass through routers. In particular it is not possible to
+access computers further away than the ISR general network.</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1><a name=accessing><span lang=EN-US style='font-family:"Verdana",sans-serif;
+color:blue'>Accessing the scouts</span></a></h1>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span lang=EN-US>To access the mobile robot “scout” from any
+computer inside ISR’s network it is only necessary to define the routing to the
+robot through the base station. Under Windows 2000 this configuration is done
+typing once after each boot the command:</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal style='text-indent:36.0pt'><span lang=EN-US
+style='font-family:"Courier New"'>route add 192.168.1.0 mask 255.255.255.0
+10.0.3.2</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span lang=EN-US style='color:red'>Note:</span><span
+lang=EN-US> the route command requires administrator privileges; if you are not
+logged as administrator you may start a command prompt with:</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal style='text-indent:36.0pt'><span lang=EN-US
+style='font-family:"Courier New"'>runas /user:</span><i><span lang=EN-US>your_computer_name</span></i><span
+lang=EN-US style='font-family:"Courier New"'>\administrator cmd</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span lang=EN-US>and issue the route command at the opened
+window.</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span lang=EN-US>After the routing configuration,
+connections to the robot follow the normal procedure as among computers linked
+through TCP/IP. E.g. telnet and ftp are invoked simply as:</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal style='text-indent:36.0pt'><span lang=EN-US
+style='font-family:"Courier New"'>telnet 192.168.1.32</span></p>
+
+<p class=MsoNormal style='text-indent:36.0pt'><span lang=EN-US
+style='font-family:"Courier New"'>ftp 192.168.1.32</span></p>
+
+<p class=MsoNormal>or</p>
+
+<p class=MsoNormal style='text-indent:36.0pt'><span lang=EN-US
+style='font-family:"Courier New"'>telnet 192.168.1.31</span></p>
+
+<p class=MsoNormal style='text-indent:36.0pt'><span lang=EN-US
+style='font-family:"Courier New"'>ftp 192.168.1.31</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>respectively for the robots <i>rpollux</i> and <i>rcastor</i>.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span lang=EN-US>Note that it is necessary to use the IP
+addresses, as the robot names are not registered in the DNS servers. No special
+privileges are required to run common net commands like telnet and ftp.</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1><a name="hw_details"><span lang=EN-US style='font-family:"Verdana",sans-serif;
+color:blue'>Hardware details</span></a></h1>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span lang=EN-US>The modem at the base station has its own
+power supply, i.e. independent of the computer. The power supply must be turned
+on to access the hyper-local network.</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span lang=EN-US>Note: if there are no robots running, the
+power supply of the modem may be turned off.</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span lang=EN-US>The radio modem of the scout may be
+disconnected thus freeing the output of the network card. This allows
+connecting the robot directly to the general network with a normal RJ45 cable,
+or to another computer through an RJ45 cross over cable.</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span lang=EN-US>Note: after doing the work with the direct
+cable connection the radio modem should be connected back to the network card,
+allowing other users to continue accessing the robots through the wireless
+connection.</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1><a name="ip_numbers_summary"><span lang=EN-US style='font-family:"Verdana",sans-serif;
+color:blue'>IP-numbers summary</span></a></h1>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><i>rbase</i>&nbsp;&nbsp;&nbsp; 10.0.3.2&nbsp;&nbsp;&nbsp;
+Base station when seen from the general network (192.168.1.1 when seen in the
+hyper-local network)</p>
+
+<p class=MsoNormal><i>rcastor</i>&nbsp;&nbsp;&nbsp;
+192.168.1.31&nbsp;&nbsp;&nbsp; Robot Nomad Scout #1</p>
+
+<p class=MsoNormal><i>rpollux</i>&nbsp;&nbsp;&nbsp;
+192.168.1.32&nbsp;&nbsp;&nbsp; Robot Nomad Scout #2</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+</div>
+
+</body>
+
+</html>
