@@ -10,4 +10,5 @@ https://stackoverflow.com/questions/4235431/git-deleted-some-files-locally-how-d
 git checkout HEAD .
 
 Word to HTML UTF-8
-save as: filtered html + (more options) Tools/weboptions/Encoding/Unicode-UTF-8
+save as: filtered html + (more options) Tools > weboptions > Encoding > Unicode-UTF-8
+(if a memory error occurs, try saving to elsewhere, and reopen MSWord)
